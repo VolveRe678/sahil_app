@@ -8,5 +8,8 @@ RSpec.describe Micropost, type: :model do
 	describe "valid attributes" do
 		it {should validate_presence_of(:content)}
 		it {should validate_length_of(:content).is_at_most(140)}
-	end
+		it {should validate_presence_of(:user_id)}
+	
+end
+
 end

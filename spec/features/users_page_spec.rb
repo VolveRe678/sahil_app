@@ -30,13 +30,13 @@ RSpec.feature "Followings", type: :feature do
 		end
 		
 		it 'should see follow or unfollow button' do
-			page.should have_selector(:link_or_button, 'Follow')
+			expect(page).to have_selector(:link_or_button, 'Follow')
 		end
 		
 		context 'when visitor follows user' do
 			it 'should change from follow to unfollow' do
 				click_button 'Follow'
-				page.should have_selector(:link_or_button, 'Unfollow')
+				expect(page).to have_selector(:link_or_button, 'Unfollow')
 			end
 		end
 		
@@ -44,7 +44,7 @@ RSpec.feature "Followings", type: :feature do
 			it 'should change from unfollow to follow' do
 				click_button 'Follow'
 				click_button 'Unfollow'
-				page.should have_selector(:link_or_button, 'Follow')
+				expect(page).to have_selector(:link_or_button, 'Follow')
 			end
 		end
 		
