@@ -1,6 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe User, type: :model do
+	let(:inactive_user) {create(:user, :non_active)}
   let(:user) {create(:user)}
   let(:user1) { create(:user, :super, name: "Sahil", email: "s@y.com",
 											 password:"123456", password_confirmation:"123456") }
@@ -132,5 +133,48 @@ RSpec.describe User, type: :model do
 		end
 	end
 
+
+	describe ".new_token" do
+		it 'should be 22 digit' do
+		expect(User.new_token.length).to eql(22)
+		end
+	end
+
+	describe ".remember" do
+		it 'should not have a remember digest' do
+			expect(user.reload.remember_digest).to_not be_present
+		end
+		
+		context 'remember and forget' do
+			before do
+				user.remember
+			end
+			
+			it 'should have a remember digest' do
+				expect(user.reload.remember_digest).to be_present
+			end
+			
+			it 'should forget remember digest' do
+				user.forget
+				expect(user.reload.remember_digest).to_not be_present
+			end
+		end
+	end
+
+
+	describe ".activate" do
+		before do
+		  inactive_user
+		end
+		it 'should check activaiton status of inactive users' do
+			expect(inactive_user).to have_attributes(:activated => false)
+		end
+		
+		it 'should activate users' do
+			inactive_user.activate
+			expect(inactive_user.activated?).to be true
+		end
+	end
+	
 	
 end
