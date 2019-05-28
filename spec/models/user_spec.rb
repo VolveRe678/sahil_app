@@ -102,14 +102,14 @@ RSpec.describe User, type: :model do
 		
 	end
 
-	describe "follow" do
+	describe ".follow" do
 		it 'should follow a user' do
 			expect{user.follow(user1)}.to change{ user.following.count }.by(1)
 		
 		end
 	end
 
-	describe "following" do
+	describe ".following" do
 		it 'should be following another user' do
 			user.follow(user1)
 			expect(user.following).to include(user1)
@@ -117,7 +117,7 @@ RSpec.describe User, type: :model do
 		end
 	end
 
-	describe 'unfollow' do
+	describe '.unfollow' do
    it 'should unfollow a user' do
 		 user.follow(user1)
 		 expect { user.unfollow(user1) }.to change { user.following.count }.by(-1)
@@ -141,31 +141,28 @@ RSpec.describe User, type: :model do
 	end
 
 	describe ".remember" do
-		it 'should not have a remember digest' do
+		before do
 			expect(user.reload.remember_digest).to_not be_present
+			user.remember
 		end
-		
-		context 'remember and forget' do
-			before do
-				user.remember
-			end
-			
-			it 'should have a remember digest' do
-				expect(user.reload.remember_digest).to be_present
-			end
-			
-			it 'should forget remember digest' do
-				user.forget
-				expect(user.reload.remember_digest).to_not be_present
-			end
+		it 'should have a remember digest' do
+			expect(user.reload.remember_digest).to be_present
 		end
 	end
-
-
-	describe ".activate" do
+	
+	describe ".forget" do
 		before do
-		  inactive_user
+			expect(user.reload.remember_digest).to_not be_present
+			user.remember
 		end
+		
+		it 'should forget remember digest' do
+			user.forget
+			expect(user.reload.remember_digest).to_not be_present
+		end
+	end
+	
+	describe ".activate" do
 		it 'should check activaiton status of inactive users' do
 			expect(inactive_user).to have_attributes(:activated => false)
 		end
