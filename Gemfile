@@ -64,6 +64,11 @@ group :test do
   # Easy installation and use of chromedriver to run system tests with Chrome
   gem 'chromedriver-helper'
   gem 'sqlite3'
+	gem 'factory_bot_rails'
+	gem 'database_cleaner'
+	gem 'rspec-rails'
+	gem 'shoulda-matchers'
+	gem 'rails-controller-testing'
 end
 
 group :production do
